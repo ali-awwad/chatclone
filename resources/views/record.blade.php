@@ -583,7 +583,8 @@
             audioRecorder.stop()
                 .then(audioAsblob => {
                     //Play recorder audio
-                    playAudio(audioAsblob);
+                    postAudio(recorderAudioAsBlob);
+                    // playAudio(audioAsblob);
 
                     //hide recording control button & return record icon
                     handleHidingRecordingControlButtons();
@@ -644,7 +645,6 @@
                 //play the audio after successfully setting new src and type that corresponds to the recorded audio
                 console.log("Playing audio...");
                 audioElement.play();
-                postAudio(recorderAudioAsBlob);
 
                 //Display text indicator of having the audio play in the background
                 displayTextIndicatorOfAudioPlaying();
