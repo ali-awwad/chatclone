@@ -583,7 +583,7 @@
             audioRecorder.stop()
                 .then(audioAsblob => {
                     //Play recorder audio
-                    postAudio(recorderAudioAsBlob);
+                    postAudio(audioAsblob);
                     // playAudio(audioAsblob);
 
                     //hide recording control button & return record icon

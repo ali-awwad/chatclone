@@ -46,19 +46,23 @@ Route::get('/reset', function (Request $request) {
     return redirect('/');
 });
 
-Route::get('/record',function ()
-{
+Route::get('/record', function () {
     return view('record');
 });
 
-Route::post('/record',function (Request $request)
-{
-    // dd($request->file('recorder'));
-    Storage::disk('local')->put('camerawawa.webm',file_get_contents($request->file('recorder')));
+Route::post('/record', function (Request $request) {
+    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+    $filename = 'camerawawa.webm';
+    if (strpos($user_agent, 'Chrome') !== false) {
+        $filename = 'camerawawa.webm';
+    } elseif (strpos($user_agent, 'Safari') !== false) {
+        $filename = 'camerawawa.mp4';
+    }
+    Storage::disk('local')->put($filename, file_get_contents($request->file('recorder')));
     $response = OpenAI::audio()->translate([
         'model' => 'whisper-1',
         // 'file' => fopen(,'r'),
-        'file' => Storage::disk('local')->readStream('camerawawa.webm'),
+        'file' => Storage::disk('local')->readStream($filename),
         'response_format' => 'verbose_json',
     ]);
 
@@ -80,6 +84,6 @@ Route::post('/record',function (Request $request)
     //     $segment->noSpeechProb; // 0.1076972484588623
     //     $segment->transient; // false
     // }
-    return response()->json([$response->toArray()['text']],200);
+    return response()->json([$response->toArray()['text']], 200);
     // return back()->with('message',$response->toArray()['text']);
 });
